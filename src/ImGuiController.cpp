@@ -136,7 +136,6 @@ void ImGuiController::renderJointRecursive(const std::shared_ptr<Joint>& joint, 
 }
 
 
-
 void ImGuiController::renderSkeletonUI() {
     if (!skeletonManager || !skeletonManager->getSkeleton()) {
         ImGui::Text("No skeleton loaded!");
@@ -159,6 +158,37 @@ void ImGuiController::renderSkeletonUI() {
         skeleton->setRotation(rotation);
     }
 
+    bool& playAnim = skeletonManager->playAnim; // Access the playAnim variable
+
+    if (ImGui::Button(playAnim ? "Pause Animation" : "Play Animation" ) && 
+        skeletonManager->haveclip()) {
+        playAnim = !playAnim; // Toggle play state
+    }
+
+    ImGui::SameLine();
+    if ( skeletonManager->haveclip() ) {
+        ImGui::Text("Status: %s", playAnim ? "Playing" : "Paused");
+    }
+    else {
+        ImGui::Text("No animation clip loaded");
+    }
+
+    static char filename[128] = "skeleton_output.skel"; // Default file name
+    ImGui::InputText("Skeleton Filename", filename, IM_ARRAYSIZE(filename));
+
+    if (ImGui::Button("Save Skeleton")) {
+        if (skeletonManager) {
+            SkeletonParser parser;
+            if (parser.writeSkeletonFile(*skeletonManager->getSkeleton() , filename)) {
+                std::cout << "Skeleton saved successfully to " << filename << "\n";
+            }
+            else {
+                std::cerr << "Failed to save skeleton to " << filename << "\n";
+            }
+        }
+    }
+
+
     ImGui::Separator();
     ImGui::Text("Joint Hierarchy:");
 
@@ -175,7 +205,6 @@ void ImGuiController::renderSkeletonRendererUI() {
         //std::cerr << "SkeletonManager not bound to ImGuiController!" << std::endl;
         return;
     }
-
 
     // Render Material
     SkeletonRenderer* renderer = skeletonManager->getRenderer();

@@ -24,6 +24,8 @@ public:
     glm::mat4 localMatrix;
     glm::mat4 worldMatrix;
 
+    Joint* parent;
+
     Joint(const std::string& name = "");
 
     void addChild(const std::shared_ptr<Joint>& child);

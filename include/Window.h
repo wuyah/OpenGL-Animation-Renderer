@@ -34,7 +34,7 @@ public:
     static bool initializeProgram();
     static bool initializeObjects();
     static bool initializeSkeletonSystem(std::string skel_file);
-    static bool initializeSkeletonSystem(std::string skel_file, std::string skin_file);
+    static bool initializeSkeletonSystem(std::string skel_file, std::string skin_file, std::string anim_file);
     static bool initializeImGui(GLFWwindow*);
     static bool initializeClothSystem();
 

@@ -3,6 +3,9 @@
 #include "Tokenizer.h"
 #include "Skeleton.h"
 
+const std::string resourceStorePath = "..\\resources\\skeletons\\";
+
+
 class SkeletonParser {
 private:
     Tokenizer tokenizer;
@@ -14,6 +17,8 @@ public:
     SkeletonParser() = default;
 
     bool parseSkeletonFile(const std::string& filename);
+
+    bool writeSkeletonFile(const Skeleton& skeleton, const std::string& filename);
 
     bool parseSkinFile(const std::string& filename);
 

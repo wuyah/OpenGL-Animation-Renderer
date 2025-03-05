@@ -1,0 +1,161 @@
+balljoint root {
+  offset 0 0 0
+  pose 0 0 0
+  rotxlimit -3.14159 3.14159
+  rotylimit -3.14159 3.14159
+  rotzlimit -3.14159 3.14159
+  balljoint head {
+    offset 0 0 -0.4
+    pose 0 0 0
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+  }
+  balljoint abdomen {
+    offset 0 -0.2 0.4
+    pose 0 0 0
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint tail_01 {
+      offset 0 0.4 0.25
+      pose 0 0 0
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+      balljoint tail_02 {
+        offset 0 0 0.4
+        pose 0 0 0
+        rotxlimit -3.14159 3.14159
+        rotylimit -3.14159 3.14159
+        rotzlimit -3.14159 3.14159
+        balljoint tail_03 {
+          offset 0 -0.2 0.25
+          pose 0 0 0
+          rotxlimit -3.14159 3.14159
+          rotylimit -3.14159 3.14159
+          rotzlimit -3.14159 3.14159
+          balljoint tail_04 {
+            offset 0 -0.3 0.2
+            pose 0 0 0
+            rotxlimit -3.14159 3.14159
+            rotylimit -3.14159 3.14159
+            rotzlimit -3.14159 3.14159
+          }
+        }
+      }
+    }
+  }
+  balljoint hip_03_r {
+    offset 0.25 -0.35 0.3
+    pose -0.739916 0.51485 2.06544
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint knee_03_r {
+      offset -0 -0.5 0
+      pose 0 0 -1.5708
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+    }
+  }
+  balljoint hip_02_r {
+    offset 0.3 -0.35 0
+    pose -0.124042 0.123098 2.34854
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint knee_02_r {
+      offset 0 -0.4 0
+      pose 0 0 -1.8326
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+    }
+  }
+  balljoint hip_01_r {
+    offset 0.25 -0.35 -0.25
+    pose 0.62841 -0.327201 1.98721
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint knee_01_r {
+      offset 0 -0.3 0
+      pose 0 0 -1.5708
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+    }
+  }
+  balljoint wing_02_r {
+    offset 0.2 0.05 -0.15
+    pose 0.123848 0.327201 0.369536
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+  }
+  balljoint wing_01_r {
+    offset 0.2 0.05 -0.25
+    pose 0.109146 0.431681 0.440928
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+  }
+  balljoint hip_03_l {
+    offset -0.25 -0.35 0.3
+    pose -0.739916 -0.51485 -2.06544
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint knee_03_l {
+      offset -0 -0.5 0
+      pose 0 0 1.5708
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+    }
+  }
+  balljoint hip_02_l {
+    offset -0.3 -0.35 0
+    pose -0.124042 -0.123098 -2.34854
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint knee_02_l {
+      offset 0 -0.4 0
+      pose 0 0 1.8326
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+    }
+  }
+  balljoint hip_01_l {
+    offset -0.25 -0.35 -0.25
+    pose 0.62841 0.327201 -1.98721
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+    balljoint knee_01_l {
+      offset 0 -0.3 0
+      pose 0 0 1.5708
+      rotxlimit -3.14159 3.14159
+      rotylimit -3.14159 3.14159
+      rotzlimit -3.14159 3.14159
+    }
+  }
+  balljoint wing_01_l {
+    offset -0.2 0.05 -0.25
+    pose 0.109146 -0.431681 -0.440928
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+  }
+  balljoint wing_02_l {
+    offset -0.2 0.05 -0.15
+    pose 0.123848 -0.327201 -0.369536
+    rotxlimit -3.14159 3.14159
+    rotylimit -3.14159 3.14159
+    rotzlimit -3.14159 3.14159
+  }
+}

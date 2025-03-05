@@ -2,7 +2,7 @@
 #include "core.h"
 #include <iostream>
 
-#define ENABLE_SKELETON_SYSTEM false
+#define ENABLE_SKELETON_SYSTEM true
 
 void error_callback(int error, const char* description) {
     // Print error.
@@ -52,9 +52,10 @@ int main(int argc, char** argv) {
     if (!window) exit(EXIT_FAILURE);
 
     if (ENABLE_SKELETON_SYSTEM) {
-        std::string skel_filename, skin_filename;
+        std::string skel_filename, skin_filename, anim_filename;
         bool skel_provided = false;
         bool skin_provided = false;
+        bool anim_provided = false;
 
         for (int i = 1; i < argc; ++i) {
             if (std::string(argv[i]) == "-skel" && i + 1 < argc) {
@@ -67,6 +68,11 @@ int main(int argc, char** argv) {
                 skin_provided = true;
                 ++i;
             }
+            if (std::string(argv[i]) == "-anim" && i + 1 < argc) {
+                anim_filename = argv[i + 1];
+                anim_provided = true;
+                ++i;
+            }
 
         }
 
@@ -76,21 +82,21 @@ int main(int argc, char** argv) {
         }
         else if (skin_provided) {
             std::cout << "Loading file: " + skel_filename << std::endl;
-            if (!Window::initializeSkeletonSystem(skel_filename, skin_filename)) exit(EXIT_FAILURE);
+            if (!Window::initializeSkeletonSystem(skel_filename, skin_filename, anim_filename)) exit(EXIT_FAILURE);
         }
         else {
             std::cout << "Skin file: " << skin_filename << std::endl;
-            if (!Window::initializeSkeletonSystem(skel_filename, skin_filename)) exit(EXIT_FAILURE);
+            if (!Window::initializeSkeletonSystem(skel_filename, skin_filename, anim_filename)) exit(EXIT_FAILURE);
 
         }
 
         std::cout << "Loaded file: " << skel_filename << std::endl;
 
     }
-
-
-    if (!Window::initializeClothSystem()) {
-        exit(EXIT_FAILURE);
+    else {
+        if (!Window::initializeClothSystem()) {
+            exit(EXIT_FAILURE);
+        }
     }
 
     std::cout << " Initialize Cloth System Success! " << std::endl;

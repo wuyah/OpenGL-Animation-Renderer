@@ -66,7 +66,7 @@ bool Window::initializeSkeletonSystem(std::string skel_file) {
     return true;
 }
 
-bool Window::initializeSkeletonSystem(std::string skel_file, std::string skin_file) {
+bool Window::initializeSkeletonSystem(std::string skel_file, std::string skin_file, std::string anim_file) {
     skeletonManager = std::make_unique<SkeletonManager>();
     if (!skeletonManager.get()->initializeSkeleton(skel_file)) {
         return false;
@@ -80,7 +80,11 @@ bool Window::initializeSkeletonSystem(std::string skel_file, std::string skin_fi
         std::cout << "Not providing skin file, skip skin file loading." << std::endl;
     }
 
-    skeletonManager->initializeAnim( "wasp_walk.anim");
+    if (!anim_file.empty()) {
+        skeletonManager->initializeAnim(anim_file);
+
+    }
+
 
     if (skeletonManager) {
         ImGuiController::getInstance().bindSkeletonManager(skeletonManager.get());
@@ -108,9 +112,12 @@ bool Window::initializeClothSystem() {
 
 void Window::cleanUp() {
     // Deallcoate the objects.
+    if(skeletonManager)
+        skeletonManager->cleanUp();
 
     // Delete the shader program.
     glDeleteProgram(shaderProgram);
+
 }
 
 // for the Window
@@ -176,11 +183,6 @@ void Window::idleCallback() {
     if (skeletonManager) {
         skeletonManager->Update();
     }
-
-    //if (clothManager) {
-    //    clothManager->Update();
-    //}
-
 }
 
 void Window::displayCallback(GLFWwindow* window) {

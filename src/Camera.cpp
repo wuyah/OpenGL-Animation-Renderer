@@ -30,8 +30,8 @@ void Camera::Update() {
         Distance * sin(radIncline),
         Distance * cos(radIncline) * cos(radAzimuth)
     );
-
 }
+
 void Camera::Reset() {
     FOV = 45.0f;
     Aspect = 1.33f;

@@ -1,4 +1,6 @@
 #include "SkeletonParser.h"
+#include <fstream>
+#include <iostream>
 
 bool SkeletonParser::parseJoint(const std::shared_ptr<Joint>& parent, const glm::mat4& parentTransform) {
     char token[256];
@@ -16,6 +18,7 @@ bool SkeletonParser::parseJoint(const std::shared_ptr<Joint>& parent, const glm:
     auto joint = std::make_shared<Joint>(jointName);
     if (parent) {
         parent->addChild(joint);
+        joint->parent = parent.get();
     }
     else {
         skeleton.setRoot(joint);
@@ -109,6 +112,49 @@ bool SkeletonParser::parseSkeletonFile(const std::string& filename) {
     tokenizer.Close();
     return true;
 }
+
+bool SkeletonParser::writeSkeletonFile(const Skeleton& skeleton, const std::string& fileName) {
+    std::string filePath = resourceStorePath + fileName;
+    std::ifstream infile(filePath);
+    if (infile.good()) {
+        std::cerr << "File " << filePath << " already exists. Not overwriting." << std::endl;
+        return false;
+    }
+
+    std::ofstream outfile(filePath);
+    if (!outfile.is_open()) {
+        std::cerr << "Error opening file " << filePath << " for writing." << std::endl;
+        return false;
+    }
+
+    // Recursive function to write joint hierarchy
+    std::function<void(const std::shared_ptr<Joint>&, int)> writeJoint;
+    writeJoint = [&](const std::shared_ptr<Joint>& joint, int depth) {
+        if (!joint) return;
+
+        std::string indent(depth * 2, ' '); // Indentation for hierarchy clarity
+        outfile << indent << "balljoint " << joint->name << " {\n";
+        outfile << indent << "  offset " << joint->offset.x << " " << joint->offset.y << " " << joint->offset.z << "\n";
+        outfile << indent << "  pose " << joint->pose.x << " " << joint->pose.y << " " << joint->pose.z << "\n";
+        outfile << indent << "  rotxlimit " << joint->rotXLimit.x << " " << joint->rotXLimit.y << "\n";
+        outfile << indent << "  rotylimit " << joint->rotYLimit.x << " " << joint->rotYLimit.y << "\n";
+        outfile << indent << "  rotzlimit " << joint->rotZLimit.x << " " << joint->rotZLimit.y << "\n";
+
+        for (const auto& child : joint->children) {
+            writeJoint(child, depth + 1);
+        }
+
+        outfile << indent << "}\n";
+    };
+
+    writeJoint(skeleton.getRoot(), 0);
+    outfile.close();
+
+    std::cout << "Skeleton written to " << filePath << " successfully." << std::endl;
+    return true;
+
+}
+
 
 Skeleton& SkeletonParser::getSkeleton() {
     return skeleton;

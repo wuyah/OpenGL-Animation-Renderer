@@ -20,9 +20,6 @@ bool SkeletonManager::initializeSkin(const std::string& skinFileName) {
     std::string filePath = resourcePath + skinFileName;
     skin = std::make_unique<Skin>();
 
-    // Allocate a new Skin object
-    skin = std::make_unique<Skin>();
-
     if (!skin->loadFromFile(filePath)) {
         std::cerr << "Failed to load skin file: " << filePath << std::endl;
         skin.reset(); // Reset to nullptr if loading fails
@@ -36,9 +33,9 @@ bool SkeletonManager::initializeSkin(const std::string& skinFileName) {
 
 bool SkeletonManager::initializeAnim(const std::string& animFileName) {
     std::string filePath = resourcePath + animFileName;
-
+    clip = std::make_unique<AnimationClip>();
     // Allocate a new Skin object
-    if (!clip.Load(filePath.c_str())) {
+    if (!clip->Load(filePath.c_str())) {
         std::cerr << "Failed to load animation clip" << std::endl;
         return false;
     }
@@ -54,27 +51,33 @@ bool SkeletonManager::initializeRenderer() {
     return true;
 }
 
+void SkeletonManager::storeCurrentSkeleton(const std::string& skelStoreFileName, const std::string& filename ) {
+    parser.writeSkeletonFile(skeleton, filename);
+}
+
 
 void SkeletonManager::Update() {
     double currentTime = glfwGetTime();
     double deltaTime = currentTime - lastTime; // Compute time difference
     lastTime = currentTime;
 
-    currentAnimTime += deltaTime;
-    if (currentAnimTime > clip.rangeEnd) {
-        float period = clip.rangeEnd - clip.rangeStart;
+    if (clip && playAnim)
+        currentAnimTime += deltaTime;
+    if (clip &&  currentAnimTime > clip->rangeEnd) {
+        float period = clip->rangeEnd - clip->rangeStart;
         if (period > 0.0f) {
             // Wrap the animation time within the clip's range.
-            currentAnimTime = clip.rangeStart + std::fmod(currentAnimTime - clip.rangeStart, period);
+            currentAnimTime = clip->rangeStart + std::fmod(currentAnimTime - clip->rangeStart, period);
         }
         else {
-            currentAnimTime = clip.rangeStart;
+            currentAnimTime = clip->rangeStart;
         }
     }
 
     // Evaluate the animation clip to update the skeleton's joint poses.
     // We use the non-const accessor getJointList() we added to Skeleton.
-    clip.Evaluate(currentAnimTime, skeleton.getJointList());
+    if(clip && playAnim)
+        clip->Evaluate(currentAnimTime, skeleton.getJointList());
 
     // Update the skeleton's transformation matrices.
     skeleton.update();
