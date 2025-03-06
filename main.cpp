@@ -141,7 +141,9 @@ int main(int argc, char** argv) {
 
     Window::cleanUp();
     // Destroy the window.
+
     glfwDestroyWindow(window);
+    window = nullptr;
     // Terminate GLFW.
     glfwTerminate();
 

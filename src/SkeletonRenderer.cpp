@@ -37,28 +37,30 @@ void SkeletonRenderer::cleanup() {
         EBO = 0;
     }
 }
+
 void SkeletonRenderer::initialize(Skeleton& skel) {
     cleanup();
 
     skeleton = &skel;
-    renderMode = SkeletonRenderMode::Wireframe;
+    //renderMode = SkeletonRenderMode::Wireframe;
 
     setupCubeBuffers(); 
 
 }
 
 // Skin initialize
-void SkeletonRenderer::initialize(Skeleton& skel, Skin* skin) {
+void SkeletonRenderer::initialize(Skeleton& skel,  std::shared_ptr<Skin> skin) {
     cleanup(); 
 
     skeleton = &skel;
-    renderMode = SkeletonRenderMode::Wireframe;
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    if (!skin) render_skin = false;
+
     if (render_skin && skin) { 
-        this->skin = skin;  
+        this->skin = std::move(skin) ;  
         if (!renderInGPU)
             setupSkinBuffersCPU();
         else

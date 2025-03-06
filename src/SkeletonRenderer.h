@@ -27,7 +27,7 @@ private:
     Skeleton* skeleton;
     SkeletonRenderMode renderMode = SkeletonRenderMode::Fill;
     bool render_skin = true;
-    Skin* skin;
+    std::shared_ptr<Skin> skin;
     void setupCubeBuffers();
     void setupSkinBuffersCPU();
     void setupSkinBuffersGPU();
@@ -42,7 +42,7 @@ public:
     void Update();
     void cleanup();
 
-    void initialize(Skeleton& skel, Skin* skin);
+    void initialize(Skeleton& skel, std::shared_ptr<Skin> skin);
     void initialize(Skeleton& skel);
     void initializeMaterial() {
         material = Material( glm::vec3(0.2f),

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IKController.h"
 #include <windows.h>
 #include <memory>
 #include "Skeleton.h"
@@ -17,9 +18,11 @@ private:
     SkeletonParser parser;
     Skeleton skeleton;
     SkeletonRenderer renderer;
-    std::unique_ptr<Skin> skin; // Use a smart pointer
+    std::shared_ptr<Skin> skin; // Use a smart pointer
 
     std::unique_ptr<AnimationClip> clip;
+
+    IKController ik;
 
     Camera* camera;
 
@@ -29,11 +32,15 @@ private:
  
 public:
     bool playAnim = false;
-
+    bool enableSkeletonEdit = true;
 
     bool initializeSkeleton(const std::string& skeletonFileName);
     bool initializeSkin(const std::string& skinFileName);
     bool initializeAnim(const std::string& animFileName);
+
+    void initilizeIK();
+
+    bool initialize(const std::string& skeletonFileName, const std::string& skinFileName, const std::string& animFileName);
     bool initializeRenderer();
 
     void storeCurrentSkeleton(const std::string& skelStoreFileName, const std::string& filename);
@@ -54,9 +61,11 @@ public:
         return &this->skeleton;
     }
 
-    void cleanUp() {
-        renderer.cleanup();
+    IKController* getIK() {
+        return &this->ik;
     }
+
+    void cleanUp();
 
     bool haveclip() {
         return clip ? true : false;

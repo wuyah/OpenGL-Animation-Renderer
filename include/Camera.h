@@ -30,6 +30,7 @@ public:
     glm::vec3 GetWorldPos() { return worldPos; }
 
     const glm::mat4 &GetViewProjectMtx() { return ViewProjectMtx; }
+    glm::vec3 worldPos;
 
 private:
     // Perspective controls
@@ -43,7 +44,6 @@ private:
     float Azimuth;   // Rotation of the camera eye position around the Y axis (degrees)
     float Incline;   // Angle of the camera eye position over the XZ plane (degrees)
 
-    glm::vec3 worldPos;
 
     // Computed data
     glm::mat4 ViewProjectMtx;

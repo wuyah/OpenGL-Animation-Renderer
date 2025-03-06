@@ -116,13 +116,23 @@ void ImGuiController::renderJointRecursive(const std::shared_ptr<Joint>& joint, 
     {
         // Edit joint properties
         ImGui::Text("Pose (Euler Angles):");
-        ImGui::DragFloat("Pose X", &joint->pose.x, 0.05f, joint->rotXLimit.x, joint->rotXLimit.y);
-        ImGui::DragFloat("Pose Y", &joint->pose.y, 0.05f, joint->rotYLimit.x, joint->rotYLimit.y);
-        ImGui::DragFloat("Pose Z", &joint->pose.z, 0.05f, joint->rotZLimit.x, joint->rotZLimit.y);
+        if (skeletonManager->enableSkeletonEdit) {
+            ImGui::DragFloat("Pose X", &joint->pose.x, 0.05f, joint->rotXLimit.x, joint->rotXLimit.y);
+            ImGui::DragFloat("Pose Y", &joint->pose.y, 0.05f, joint->rotYLimit.x, joint->rotYLimit.y);
+            ImGui::DragFloat("Pose Z", &joint->pose.z, 0.05f, joint->rotZLimit.x, joint->rotZLimit.y);
 
-        ImGui::DragFloat("Orig Pose X", &joint->orginalPos.x, 0.05f, joint->rotXLimit.x, joint->rotXLimit.y);
-        ImGui::DragFloat("Orig Pose Y", &joint->orginalPos.y, 0.05f, joint->rotYLimit.x, joint->rotYLimit.y);
-        ImGui::DragFloat("Orig Pose Z", &joint->orginalPos.z, 0.05f, joint->rotZLimit.x, joint->rotZLimit.y);
+        }
+        else {
+            ImGui::Text("Pose: X: %.3f", joint->pose.x);
+            ImGui::Text("Y: %.3f", joint->pose.y);
+            ImGui::Text("Z: %.3f", joint->pose.z);
+        }
+
+        ImGui::Text("Orig Pose: X: %.3f", joint->orginalPos.x);
+        ImGui::SameLine();
+        ImGui::Text("Y: %.3f", joint->orginalPos.y);
+        ImGui::SameLine();
+        ImGui::Text("Z: %.3f", joint->orginalPos.z);
 
         // Recursively render children
         for (const auto& child : joint->children) {
@@ -243,8 +253,22 @@ void ImGuiController::renderSkeletonRendererUI() {
 
     // Render skeleton editor
     renderSkeletonUI();
-    renderClothRendererUI();
+    renderIKUI();
+    // renderClothRendererUI();
 }
+
+void ImGuiController::renderIKUI() {
+    if (!skeletonManager) return;
+    IKController* ik = skeletonManager->getIK();
+    ImGui::Text("IK Control Points!");
+
+    for (auto& p : ik->controlPoints) {
+        ImGui::Text(p.boundJoint->name.c_str());    // name
+        ImGui::DragFloat3("Position", & p.position[0], 0.01);
+    }
+
+}
+
 
 void ImGuiController::renderClothRendererUI() {
     // Check that a ClothManager (and thus a ClothRenderer) is bound.
@@ -285,7 +309,6 @@ void ImGuiController::renderClothRendererUI() {
         ImGui::Text("No Cloth Renderer found!");
     }
 }
-
 
 void ImGuiController::renderClothSimulationUI() {
     // Check if the clothManager is bound.

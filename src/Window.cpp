@@ -68,23 +68,8 @@ bool Window::initializeSkeletonSystem(std::string skel_file) {
 
 bool Window::initializeSkeletonSystem(std::string skel_file, std::string skin_file, std::string anim_file) {
     skeletonManager = std::make_unique<SkeletonManager>();
-    if (!skeletonManager.get()->initializeSkeleton(skel_file)) {
-        return false;
-    }
-    if (!skin_file.empty()) {
-        if (!skeletonManager->initializeSkin(skin_file)) {
-            return false;
-        }
-    }
-    else {
-        std::cout << "Not providing skin file, skip skin file loading." << std::endl;
-    }
 
-    if (!anim_file.empty()) {
-        skeletonManager->initializeAnim(anim_file);
-
-    }
-
+    skeletonManager->initialize(skel_file, skin_file, anim_file);
 
     if (skeletonManager) {
         ImGuiController::getInstance().bindSkeletonManager(skeletonManager.get());
@@ -114,6 +99,8 @@ void Window::cleanUp() {
     // Deallcoate the objects.
     if(skeletonManager)
         skeletonManager->cleanUp();
+
+    ImGuiController::getInstance().shutdown();
 
     // Delete the shader program.
     glDeleteProgram(shaderProgram);

@@ -1,4 +1,6 @@
 #include "SkeletonManager.h"
+#include <set>
+
 
 bool SkeletonManager::initializeSkeleton(const std::string& fileName) {
     // Parse the .skel file
@@ -18,7 +20,7 @@ bool SkeletonManager::initializeSkeleton(const std::string& fileName) {
 
 bool SkeletonManager::initializeSkin(const std::string& skinFileName) {
     std::string filePath = resourcePath + skinFileName;
-    skin = std::make_unique<Skin>();
+    skin = std::make_shared<Skin>();
 
     if (!skin->loadFromFile(filePath)) {
         std::cerr << "Failed to load skin file: " << filePath << std::endl;
@@ -47,9 +49,39 @@ bool SkeletonManager::initializeAnim(const std::string& animFileName) {
 }
 
 bool SkeletonManager::initializeRenderer() {
-    renderer.initialize(skeleton, skin.get());
+    renderer.initialize(skeleton, skin);
     return true;
 }
+
+
+void SkeletonManager::initilizeIK() {
+    std::set<std::string> initialPoints = { "j_5" };
+
+    ik.initialize(&skeleton, initialPoints);
+}
+
+bool SkeletonManager::initialize(const std::string& skeletonFileName, const std::string& skinFileName, const std::string& animFileName) {
+    if (!initializeSkeleton(skeletonFileName)) {
+        return false;
+    }
+    if (!skinFileName.empty()) {
+        if (!initializeSkin(skinFileName)) {
+            return false;
+        }
+    }
+    else {
+        std::cout << "Not providing skin file, skip skin file loading." << std::endl;
+    }
+
+    if (!animFileName.empty()) {
+        initializeAnim(animFileName);
+    }
+
+    initilizeIK();
+    
+    return true;
+}
+
 
 void SkeletonManager::storeCurrentSkeleton(const std::string& skelStoreFileName, const std::string& filename ) {
     parser.writeSkeletonFile(skeleton, filename);
@@ -89,4 +121,10 @@ void SkeletonManager::Update() {
 void SkeletonManager::draw(const glm::mat4& viewProjMatrix, GLuint shaderProgram) {
     skeleton.update();
     renderer.render(viewProjMatrix, shaderProgram, camera->GetWorldPos() );
+    ik.draw(viewProjMatrix, *camera);
+}
+
+void SkeletonManager::cleanUp() {
+    renderer.cleanup();
+    ik.cleanup();
 }

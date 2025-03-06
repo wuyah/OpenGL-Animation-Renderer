@@ -30,6 +30,7 @@ public:
     void renderSkeletonRendererUI();
     void renderClothRendererUI();
     void renderClothSimulationUI();
+    void renderIKUI();
 
     ImGuiController() = default;
     ~ImGuiController();

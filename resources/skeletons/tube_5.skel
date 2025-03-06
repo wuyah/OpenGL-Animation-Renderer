@@ -1,0 +1,36 @@
+balljoint root {
+    offset 0 0.5 0
+    boxmin -0.05 -0.5 -0.05
+    boxmax 0.05 0.0 0.05
+    pose 0 0 0
+    balljoint j_1 {
+        offset 0 -0.5 0
+        boxmin -0.05 -0.5 -0.05
+        boxmax 0.05 0.0 0.05
+        pose 0 0 0
+        balljoint j_2 {
+            offset 0 -0.5 0
+            boxmin -0.05 -0.5 -0.05
+            boxmax 0.05 0.0 0.05
+            pose 0 0 0
+            balljoint j_3 {
+                offset 0 -0.5 0
+                boxmin -0.05 -0.5 -0.05
+                boxmax 0.05 0.0 0.05
+                pose 0 0 0
+                balljoint j_4 {
+                    offset 0 -0.5 0
+                    boxmin -0.05 -0.5 -0.05
+                    boxmax 0.05 0.0 0.05
+                    pose 0 0 0
+                    balljoint j_5 {
+                        offset 0 -0.5 0
+                        boxmin -0.05 -0.5 -0.05
+                        boxmax 0.05 0.0 0.05
+                        pose 0 0 0
+                    }
+                }
+            }
+        }
+    }
+}
