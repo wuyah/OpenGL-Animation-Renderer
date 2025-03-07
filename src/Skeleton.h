@@ -31,6 +31,13 @@ public:
     void addChild(const std::shared_ptr<Joint>& child);
     void computeLocalMatrix();
     void update(const glm::mat4& parentTransform);
+    
+    glm::vec3 getWorldPosition();
+    glm::vec3 getEndPointWorldPos();
+
+    void updateWorldMatrix();
+    void setPosition(const glm::vec3& newWorldPos);
+    
 };
 
 class Skeleton {

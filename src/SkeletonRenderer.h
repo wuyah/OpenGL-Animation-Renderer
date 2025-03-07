@@ -39,7 +39,7 @@ private:
 public:
     SkeletonRenderer();
     ~SkeletonRenderer();
-    void Update();
+    void update();
     void cleanup();
 
     void initialize(Skeleton& skel, std::shared_ptr<Skin> skin);

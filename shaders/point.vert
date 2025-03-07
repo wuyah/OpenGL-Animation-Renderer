@@ -14,7 +14,6 @@ void main()
     gl_PointSize = floor(size);
     
     // Position
-    vec4 worldPos = model * vec4(aPos, 1.0);
-    gl_Position = viewProj * worldPos;
+    gl_Position = viewProj * vec4(aPos, 1.0);
 }
 

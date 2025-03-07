@@ -99,26 +99,30 @@ void IKController::initialize(Skeleton* newSkeleton, const std::set<std::string>
 
     controlPoints.clear();
 
-    const auto& joints = skeleton->getJointData();
+    joints = skeleton->getJointData();
     for (auto joint : joints) {
         if (jointNames.find(joint->name) != jointNames.end()) {
-            glm::vec4 localPos4 = glm::vec4(joint->pose, 1.0f);
 
-            IKControlPoint p( glm::vec3( joint->worldMatrix * localPos4), POINT_COLOR, joint);
+            IKControlPoint p( joint->getEndPointWorldPos(), POINT_COLOR, joint);
             controlPoints.push_back(p);
         }
     }
 
     renderer = std::make_unique<IKControlPointRenderer>();
     renderer->initialize();
+
+    solver = std::make_unique<IKSolver>();
+    solver->initialize(joints);
 }
 
 void  IKController::draw(const glm::mat4& viewProjMat, const Camera& cam) {
     this->renderer->render(this->controlPoints, viewProjMat, cam.worldPos );
 }
 
-void IKController::Update() {
+void IKController::update() {
 
+    solver->SolveIK_Transpose_3DOF(controlPoints[0].position, 10, 1e-4, 0.001);
+    skeleton->update();
 }
 
 void IKController::cleanup() {

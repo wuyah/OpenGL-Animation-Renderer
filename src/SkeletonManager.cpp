@@ -56,7 +56,7 @@ bool SkeletonManager::initializeRenderer() {
 
 void SkeletonManager::initilizeIK() {
     std::set<std::string> initialPoints = { "j_5" };
-
+    skeleton.update();
     ik.initialize(&skeleton, initialPoints);
 }
 
@@ -111,11 +111,13 @@ void SkeletonManager::Update() {
     if(clip && playAnim)
         clip->Evaluate(currentAnimTime, skeleton.getJointList());
 
+    ik.update();
+
     // Update the skeleton's transformation matrices.
     skeleton.update();
 
     // Update the renderer if needed.
-    renderer.Update();
+    renderer.update();
 }
 
 void SkeletonManager::draw(const glm::mat4& viewProjMatrix, GLuint shaderProgram) {

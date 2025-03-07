@@ -5,6 +5,9 @@
 #include <set>
 #include <deque>
 #include "Camera.h"
+#include "IKSolver.h"
+
+class IKSolver;
 
 // Control points of IK
 class IKControlPoint {
@@ -51,15 +54,17 @@ public:
 
     std::vector<IKControlPoint> controlPoints;
     Skeleton* skeleton;
-    std::vector<Joint*> joints;
+    std::vector< std::shared_ptr<Joint>> joints;
 
     std::unique_ptr<IKControlPointRenderer>  renderer;
+
+    std::unique_ptr<IKSolver> solver;
 
 	IKController();
 	~IKController();
 
     void initialize(Skeleton* newSkeleton, const std::set<std::string> jointName);
-    void Update();
+    void update();
     void draw(const glm::mat4& viewProjMat, const Camera& cam);
 
     void cleanup();

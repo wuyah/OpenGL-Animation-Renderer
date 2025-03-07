@@ -44,6 +44,48 @@ void Joint::update(const glm::mat4& parentTransform) {
     }
 }
 
+glm::vec3 Joint::getWorldPosition() {
+    return glm::vec3(worldMatrix[3]);
+}
+
+glm::vec3 Joint::getEndPointWorldPos() {
+    return glm::vec3(worldMatrix[3]) + offset;
+}
+
+void Joint::updateWorldMatrix() {
+    if (parent) {
+        // Compute worldMatrix by combining parent's worldMatrix with localMatrix
+        worldMatrix = parent->worldMatrix * localMatrix;
+    }
+    else {
+        // Root joint: worldMatrix is just the localMatrix
+        worldMatrix = localMatrix;
+    }
+
+    // Recursively update children
+    for (const auto& child : children) {
+        child->updateWorldMatrix();
+    }
+}
+
+
+void Joint::setPosition(const glm::vec3& newWorldPos) {
+    if (parent) {
+        // Compute local position relative to parent
+        glm::mat4 parentInv = glm::inverse(parent->worldMatrix);
+        glm::vec4 localPos = parentInv * glm::vec4(newWorldPos, 1.0f);
+        offset = glm::vec3(localPos); // Update offset
+    }
+    else {
+        // Root joint - world position is directly set
+        offset = newWorldPos;
+    }
+
+    // Update transformations
+    computeLocalMatrix();
+    updateWorldMatrix();
+}
+
 // Skeleton class implementation
 Skeleton::Skeleton()
     : worldMatrix(glm::identity<glm::mat4>()) {}

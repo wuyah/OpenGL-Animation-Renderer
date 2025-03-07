@@ -340,12 +340,11 @@ void SkeletonRenderer::render(const glm::mat4& viewProjMatrix, GLuint shaderProg
         glUseProgram(0);
     }
 
-
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Reset to default mode
 }
 
 
-void SkeletonRenderer::Update() {
+void SkeletonRenderer::update() {
     if(!renderInGPU)
         updateSkinVerticesCPU();
 }
