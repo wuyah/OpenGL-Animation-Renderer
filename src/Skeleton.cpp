@@ -16,7 +16,8 @@ Joint::Joint(const std::string& name)
     rotYLimit(0.0f),
     rotZLimit(0.0f),
     localMatrix(1.0f),
-    worldMatrix(1.0f) {}
+    worldMatrix(1.0f), 
+    children(0) {}
 
 void Joint::addChild(const std::shared_ptr<Joint>& child) {
     children.push_back(child);
@@ -61,10 +62,11 @@ void Joint::updateWorldMatrix() {
         // Root joint: worldMatrix is just the localMatrix
         worldMatrix = localMatrix;
     }
-
-    // Recursively update children
-    for (const auto& child : children) {
-        child->updateWorldMatrix();
+    if (children.size() > 0) {
+        // Recursively update children
+        for (const auto& child : children) {
+            child->updateWorldMatrix();
+        }
     }
 }
 

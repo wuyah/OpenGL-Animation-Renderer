@@ -55,9 +55,10 @@ bool SkeletonManager::initializeRenderer() {
 
 
 void SkeletonManager::initilizeIK() {
-    std::set<std::string> initialPoints = { "j_5" };
+    std::set<std::string> initialPoints = { "end_3" };
     skeleton.update();
-    ik.initialize(&skeleton, initialPoints);
+    //ik.initialize(&skeleton, initialPoints);
+    ik.initializeAuto(&skeleton);
 }
 
 bool SkeletonManager::initialize(const std::string& skeletonFileName, const std::string& skinFileName, const std::string& animFileName) {

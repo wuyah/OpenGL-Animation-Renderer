@@ -264,7 +264,7 @@ void ImGuiController::renderIKUI() {
 
     for (auto& p : ik->controlPoints) {
         ImGui::Text(p.boundJoint->name.c_str());    // name
-        ImGui::DragFloat3("Position", & p.position[0], 0.01);
+        ImGui::DragFloat3(  (std::string("Position") + p.boundJoint->name).c_str(), &p.position[0], 0.01);
     }
 
 }

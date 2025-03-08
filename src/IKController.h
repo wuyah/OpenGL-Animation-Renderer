@@ -53,8 +53,8 @@ public:
     const glm::vec3 POINT_COLOR = { 1.f, 0.f, 0.f };
 
     std::vector<IKControlPoint> controlPoints;
-    Skeleton* skeleton;
-    std::vector< std::shared_ptr<Joint>> joints;
+    Skeleton* skeleton;                             // holds for update world matrix
+    std::vector< std::shared_ptr<Joint>> joints;    // All joints
 
     std::unique_ptr<IKControlPointRenderer>  renderer;
 
@@ -64,6 +64,7 @@ public:
 	~IKController();
 
     void initialize(Skeleton* newSkeleton, const std::set<std::string> jointName);
+    void initializeAuto(Skeleton* skel);
     void update();
     void draw(const glm::mat4& viewProjMat, const Camera& cam);
 

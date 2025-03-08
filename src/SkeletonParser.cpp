@@ -16,6 +16,8 @@ bool SkeletonParser::parseJoint(const std::shared_ptr<Joint>& parent, const glm:
     }
 
     auto joint = std::make_shared<Joint>(jointName);
+
+    joint->parent = nullptr;
     if (parent) {
         parent->addChild(joint);
         joint->parent = parent.get();

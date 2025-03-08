@@ -103,7 +103,7 @@ void IKController::initialize(Skeleton* newSkeleton, const std::set<std::string>
     for (auto joint : joints) {
         if (jointNames.find(joint->name) != jointNames.end()) {
 
-            IKControlPoint p( joint->getEndPointWorldPos(), POINT_COLOR, joint);
+            IKControlPoint p( joint->getWorldPosition(), POINT_COLOR, joint);
             controlPoints.push_back(p);
         }
     }
@@ -115,13 +115,44 @@ void IKController::initialize(Skeleton* newSkeleton, const std::set<std::string>
     solver->initialize(joints);
 }
 
+
+void IKController::initializeAuto(Skeleton* skel) {
+    this->skeleton = skel;
+    joints = skeleton->getJointData();
+
+    controlPoints.clear();
+
+    for (auto j : joints) {
+        if (j->children.size() == 0) {
+            IKControlPoint p(j->getWorldPosition(), POINT_COLOR, j);
+            controlPoints.push_back(p);
+        }
+    }
+    renderer = std::make_unique<IKControlPointRenderer>();
+    renderer->initialize();
+
+    solver = std::make_unique<IKSolver>();
+    //solver->initialize(joints);
+
+    std::vector<IKControlPoint*> points;
+
+    for (auto p : controlPoints) {
+        points.push_back(&p);
+    }
+
+    solver->initializeByPoints(points);
+}
+
+
+
+
 void  IKController::draw(const glm::mat4& viewProjMat, const Camera& cam) {
     this->renderer->render(this->controlPoints, viewProjMat, cam.worldPos );
 }
 
 void IKController::update() {
-
-    solver->SolveIK_Transpose_3DOF(controlPoints[0].position, 10, 1e-4, 0.001);
+    // solver->SolveIK_Transpose_3DOF(controlPoints[0].position, 10, 1e-4, 0.001);
+    solver->SolveIK_FABRIK();
     skeleton->update();
 }
 
